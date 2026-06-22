@@ -52,6 +52,24 @@ class IssueController extends Controller
         return redirect()->route('projects.show', $request->project_id);
     }
 
+    public function attachTag(Request $request, Issue $issue)
+    {
+        $issue->tags()->attach($request->tag_id);
+
+        return response()->json([
+            'message' => 'Tag attached'
+        ]);
+    }
+
+    public function detachTag(Request $request, Issue $issue)
+    {
+        $issue->tags()->detach($request->tag_id);
+
+        return response()->json([
+            'message' => 'Tag removed'
+        ]);
+    }
+
     /**
      * Show single issue
      */
@@ -71,6 +89,7 @@ class IssueController extends Controller
 
         return view('issues.edit', compact('issue'));
     }
+
 
     /**
      * Update issue

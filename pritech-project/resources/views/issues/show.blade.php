@@ -8,7 +8,7 @@
             <div class="flex gap-2">
 
                 <a href="{{ route('issues.edit', $issue) }}"
-                   class="bg-yellow-500 text-white px-3 py-2 rounded">
+                   class="bg-yellow-500 text-black px-3 py-2 rounded">
                     Edit
                 </a>
 
@@ -19,7 +19,7 @@
                     @csrf
                     @method('DELETE')
 
-                    <button class="bg-red-600 text-white px-3 py-2 rounded">
+                    <button class="bg-red-600 text-black px-3 py-2 rounded">
                         Delete
                     </button>
 
@@ -31,7 +31,6 @@
 
     <div class="py-6 max-w-4xl mx-auto space-y-6">
 
-        {{-- ISSUE INFO --}}
         <div class="bg-white p-6 rounded shadow">
 
             <p class="text-gray-600 mb-4">
@@ -69,11 +68,55 @@
         </div>
 
         <div class="bg-white p-6 rounded shadow">
-            <h3 class="font-bold mb-2">Tags</h3>
+            <h3 class="font-bold mb-3">Tags</h3>
+        
+            <form method="POST" action="{{ route('tags.store') }}" class="flex gap-2 mb-4">
+                @csrf
+        
+                <input type="text"
+                       name="name"
+                       placeholder="New tag name"
+                       class="border p-2 rounded w-full">
+        
+                <input type="color"
+                       name="color"
+                       class="w-12 h-10 border rounded">
+        
+                <button class="bg-green-600 text-black px-4 py-2 rounded">
+                    Create
+                </button>
+            </form>
+        
+            <div class="flex flex-wrap gap-2 mb-4">
+                @foreach($issue->tags as $tag)
+                <div class="flex items-center gap-1 px-3 py-1 rounded text-white"
+                    style="background-color: {{ $tag->color ?? '#3490dc' }}">
 
-            <p class="text-gray-500 text-sm">
-                (Next step: AJAX attach/detach tags here)
-            </p>
+                        <span>{{ $tag->name }}</span>
+
+                        <button onclick="detachTag({{ $tag->id }})"
+                                class="ml-2 text-white font-bold">
+                            ×
+                        </button>
+
+                    </div>
+                @endforeach
+            </div>
+        
+            <div class="flex gap-2">
+                <select id="tagSelect" class="border p-2 w-full">
+                    @foreach(\App\Models\Tag::all() as $tag)
+                        <option value="{{ $tag->id }}">
+                            {{ $tag->name }}
+                        </option>
+                    @endforeach
+                </select>
+        
+                <button onclick="attachTag()"
+                        class="bg-blue-600 text-black px-4 py-2 rounded border border-gray-300">
+                    Attach
+                </button>
+            </div>
         </div>
 
         <div class="bg-white p-6 rounded shadow">
@@ -86,3 +129,41 @@
 
     </div>
 </x-app-layout>
+
+<script>
+    function attachTag() {
+        let tagId = document.getElementById('tagSelect').value;
+    
+        fetch(`/issues/{{ $issue->id }}/attach-tag`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                tag_id: tagId
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            location.reload(); 
+        });
+    }
+
+    function detachTag(tagId) {
+        fetch(`/issues/{{ $issue->id }}/detach-tag`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                tag_id: tagId
+            })
+        })
+        .then(res => res.json())
+        .then(() => {
+            location.reload();
+        });
+    }
+    </script>

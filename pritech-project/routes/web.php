@@ -3,6 +3,7 @@
 use App\Http\Controllers\IssueController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TagController;
 use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +24,10 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::resource('projects', ProjectController::class);
     Route::resource('issues', IssueController::class);
+    Route::resource('tags', TagController::class);
+
+    Route::post('/issues/{issue}/attach-tag', [IssueController::class, 'attachTag']);
+Route::post('/issues/{issue}/detach-tag', [IssueController::class, 'detachTag']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
