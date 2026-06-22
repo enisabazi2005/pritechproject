@@ -14,6 +14,16 @@ class Issue extends Model
     /** @use HasFactory<\Database\Factories\IssueFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'project_id',
+        'title',
+        'description',
+        'status',
+        'priority',
+        'due_date',
+    ];
+    
+
     public function project()
     {
         return $this->belongsTo(Project::class);

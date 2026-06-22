@@ -23,12 +23,12 @@ return new class extends Migration
                 'open',
                 'in_progress',
                 'closed',
-            ]);
+            ])->default('open');
             $table->enum('priority', [
                 'low',
                 'medium',
                 'high',
-            ]);
+            ])->default('medium');
             $table->date('due_date')->nullable();
             $table->timestamps();
         });

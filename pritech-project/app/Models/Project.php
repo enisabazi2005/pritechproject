@@ -11,6 +11,13 @@ class Project extends Model
     /** @use HasFactory<\Database\Factories\ProjectFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'description',
+        'start_date',
+        'deadline',
+    ];
+
     public function issues()
     {
         return $this->hasMany(Issue::class);

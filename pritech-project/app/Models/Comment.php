@@ -11,6 +11,12 @@ class Comment extends Model
     /** @use HasFactory<\Database\Factories\CommentFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'issue_id',
+        'author_name',
+        'body',
+    ];
+
     public function issue()
     {
         return $this->belongsTo(Issue::class);

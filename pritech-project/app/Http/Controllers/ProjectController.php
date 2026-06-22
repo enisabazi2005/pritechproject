@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -11,7 +12,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        return view('projects.index');
     }
 
     /**
@@ -19,7 +20,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('projects.create');
     }
 
     /**
@@ -27,38 +28,53 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Project::create($request->validate([
+            'name' => 'required',
+            'description' => 'nullable',
+            'start_date' => 'nullable|date',
+            'deadline' => 'nullable|date|after_or_equal:start_date',
+        ]));
+    
+        return redirect()->route('dashboard');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Project $project)
     {
-        //
+        $project->load('issues');
+    
+        return view('projects.show', compact('project'));
     }
-
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Project $project)
     {
-        //
+        return view('projects.edit', compact('project'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Project $project)
     {
-        //
+        $project->update($request->validate([
+            'name' => 'required',
+            'description' => 'nullable',
+        ]));
+    
+        return redirect()->route('dashboard');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Project $project)
     {
-        //
+        $project->delete();
+    
+        return redirect()->route('dashboard');
     }
 }

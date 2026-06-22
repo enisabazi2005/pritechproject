@@ -11,6 +11,11 @@ class Tag extends Model
     /** @use HasFactory<\Database\Factories\TagFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'color',
+    ];
+
     public function issues()
     {
         return $this->belongsToMany(Issue::class);
