@@ -70,6 +70,30 @@ class IssueController extends Controller
         ]);
     }
 
+    public function storeComment(Request $request, Issue $issue)
+    {
+        $request->validate([
+            'author_name' => 'required',
+            'body' => 'required'
+        ]);
+
+        $comment = $issue->comments()->create([
+            'author_name' => $request->author_name,
+            'body' => $request->body
+        ]);
+
+        return response()->json($comment);
+    }
+
+    public function loadComments(Issue $issue)
+    {
+        $comments = $issue->comments()
+            ->latest()
+            ->paginate(5);
+
+        return response()->json($comments);
+    }
+
     /**
      * Show single issue
      */

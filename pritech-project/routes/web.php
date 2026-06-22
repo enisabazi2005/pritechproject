@@ -27,7 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('tags', TagController::class);
 
     Route::post('/issues/{issue}/attach-tag', [IssueController::class, 'attachTag']);
-Route::post('/issues/{issue}/detach-tag', [IssueController::class, 'detachTag']);
+    Route::post('/issues/{issue}/detach-tag', [IssueController::class, 'detachTag']);
+    Route::post('/issues/{issue}/comments', [IssueController::class, 'storeComment']);
+    Route::get('/issues/{issue}/comments', [IssueController::class, 'loadComments']);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
