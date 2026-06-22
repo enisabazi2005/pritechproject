@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCommentRequest;
+use App\Http\Requests\StoreIssueRequest;
+use App\Http\Requests\UpdateIssueRequest;
 use App\Models\Issue;
 use App\Models\Project;
 use Illuminate\Http\Request;
@@ -29,27 +32,36 @@ class IssueController extends Controller
     /**
      * Store issue
      */
-    public function store(Request $request)
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'project_id' => 'required|exists:projects,id',
+    //         'title' => 'required',
+    //         'description' => 'nullable',
+    //         'status' => 'required|in:open,in_progress,closed',
+    //         'priority' => 'required|in:low,medium,high',
+    //         'due_date' => 'nullable|date',
+    //     ]);
+
+    //     Issue::create([
+    //         'project_id' => $request->project_id,
+    //         'title' => $request->title,
+    //         'description' => $request->description,
+    //         'status' => $request->status,
+    //         'priority' => $request->priority,
+    //         'due_date' => $request->due_date,
+    //     ]);
+
+    //     return redirect()->route('projects.show', $request->project_id);
+    // }
+    public function store(StoreIssueRequest $request)
     {
-        $request->validate([
-            'project_id' => 'required|exists:projects,id',
-            'title' => 'required',
-            'description' => 'nullable',
-            'status' => 'required|in:open,in_progress,closed',
-            'priority' => 'required|in:low,medium,high',
-            'due_date' => 'nullable|date',
-        ]);
+        Issue::create($request->validated());
 
-        Issue::create([
-            'project_id' => $request->project_id,
-            'title' => $request->title,
-            'description' => $request->description,
-            'status' => $request->status,
-            'priority' => $request->priority,
-            'due_date' => $request->due_date,
-        ]);
-
-        return redirect()->route('projects.show', $request->project_id);
+        return redirect()->route(
+            'projects.show',
+            $request->project_id
+        );
     }
 
     public function attachTag(Request $request, Issue $issue)
@@ -70,20 +82,33 @@ class IssueController extends Controller
         ]);
     }
 
-    public function storeComment(Request $request, Issue $issue)
+    // public function storeComment(Request $request, Issue $issue)
+    // {
+    //     $request->validate([
+    //         'author_name' => 'required',
+    //         'body' => 'required'
+    //     ]);
+
+    //     $comment = $issue->comments()->create([
+    //         'author_name' => $request->author_name,
+    //         'body' => $request->body
+    //     ]);
+
+    //     return response()->json($comment);
+    // }
+
+    public function storeComment(
+        StoreCommentRequest $request,
+        Issue $issue
+    )
     {
-        $request->validate([
-            'author_name' => 'required',
-            'body' => 'required'
-        ]);
-
-        $comment = $issue->comments()->create([
-            'author_name' => $request->author_name,
-            'body' => $request->body
-        ]);
-
+        $comment = $issue->comments()->create(
+            $request->validated()
+        );
+    
         return response()->json($comment);
     }
+
 
     public function loadComments(Issue $issue)
     {
@@ -118,21 +143,32 @@ class IssueController extends Controller
     /**
      * Update issue
      */
-    public function update(Request $request, string $id)
+    // public function update(Request $request, string $id)
+    // {
+    //     $issue = Issue::findOrFail($id);
+
+    //     $request->validate([
+    //         'title' => 'required',
+    //         'description' => 'nullable',
+    //         'status' => 'required|in:open,in_progress,closed',
+    //         'priority' => 'required|in:low,medium,high',
+    //         'due_date' => 'nullable|date',
+    //     ]);
+
+    //     $issue->update($request->all());
+
+    //     return redirect()->route('projects.show', $issue->project_id);
+    // }
+    public function update(UpdateIssueRequest $request, string $id)
     {
         $issue = Issue::findOrFail($id);
 
-        $request->validate([
-            'title' => 'required',
-            'description' => 'nullable',
-            'status' => 'required|in:open,in_progress,closed',
-            'priority' => 'required|in:low,medium,high',
-            'due_date' => 'nullable|date',
-        ]);
+        $issue->update($request->validated());
 
-        $issue->update($request->all());
-
-        return redirect()->route('projects.show', $issue->project_id);
+        return redirect()->route(
+            'projects.show',
+            $issue->project_id
+        );
     }
 
     /**

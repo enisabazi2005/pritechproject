@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -26,15 +28,21 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        Project::create($request->validate([
-            'name' => 'required',
-            'description' => 'nullable',
-            'start_date' => 'nullable|date',
-            'deadline' => 'nullable|date|after_or_equal:start_date',
-        ]));
+    // public function store(Request $request)
+    // {
+    //     Project::create($request->validate([
+    //         'name' => 'required',
+    //         'description' => 'nullable',
+    //         'start_date' => 'nullable|date',
+    //         'deadline' => 'nullable|date|after_or_equal:start_date',
+    //     ]));
     
+    //     return redirect()->route('dashboard');
+    // }
+    public function store(StoreProjectRequest $request)
+    {
+        Project::create($request->validated());
+
         return redirect()->route('dashboard');
     }
 
@@ -58,13 +66,19 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
-    {
-        $project->update($request->validate([
-            'name' => 'required',
-            'description' => 'nullable',
-        ]));
+    // public function update(Request $request, Project $project)
+    // {
+    //     $project->update($request->validate([
+    //         'name' => 'required',
+    //         'description' => 'nullable',
+    //     ]));
     
+    //     return redirect()->route('dashboard');
+    // }
+    public function update(UpdateProjectRequest $request, Project $project)
+    {
+        $project->update($request->validated());
+
         return redirect()->route('dashboard');
     }
 
