@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\Issue;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Tag extends Model
+{
+    /** @use HasFactory<\Database\Factories\TagFactory> */
+    use HasFactory;
+
+    public function issues()
+    {
+        return $this->belongsToMany(Issue::class);
+    }
+}
