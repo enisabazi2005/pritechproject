@@ -1,9 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Edit Project
-        </h2>
-    </x-slot>
 
     <div class="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50 min-h-screen">
         <div class="max-w-3xl mx-auto">
@@ -67,7 +62,7 @@
     
                             <button style="padding:5px;"
                                 type="submit"
-                                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-black bg-indigo-600 rounded-xl hover:bg-indigo-700 transition shadow-sm border border-gray-300 rounded"
+                                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition shadow-sm border border-gray-300 rounded"
                             >
                                 Save Changes
                             </button>
