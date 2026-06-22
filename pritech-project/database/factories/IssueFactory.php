@@ -18,7 +18,20 @@ class IssueFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'project_id' => \App\Models\Project::factory(),
+            'title' => fake()->sentence(),
+            'description' => fake()->paragraph(),
+            'status' => fake()->randomElement([
+                'open',
+                'in_progress',
+                'closed',
+            ]),
+            'priority' => fake()->randomElement([
+                'low',
+                'medium',
+                'high',
+            ]),
+            'due_date' => fake()->date(),
         ];
     }
 }
